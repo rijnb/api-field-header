@@ -80,7 +80,7 @@ function createApp(): void {
     <div class="section">
       <div class="grid">
         <div class="full">
-          <label for="json-input">JSON Input</label>
+          <label for="json-input">Full JSON response (generated server-side, before filtering)</label>
           <div id="preset-buttons" class="preset-buttons"></div>
           <textarea id="json-input" class="json-input" spellcheck="false"></textarea>
           <div id="json-error" class="error"></div>
@@ -88,7 +88,7 @@ function createApp(): void {
 
         <div>
           <label for="include-input">
-            Header: Attributes <span class="hint">Field inclsuion header, e.g. A.B, A(B, C), *</span>
+            Header: Attributes <span class="hint">Field inclusion header, e.g. A.B, A(B, C), *</span>
           </label>
           <input type="text" id="include-input" value="" placeholder='e.g. A.B, A.C or A(B, C) or *' />
         </div>
@@ -115,7 +115,7 @@ function createApp(): void {
     </div>
 
     <div class="section result-section">
-      <label for="json-output">Filtered Output</label>
+      <label for="json-output">Filtered server response (received by client)</label>
       <textarea id="json-output" class="json-output" readonly spellcheck="false"></textarea>
     </div>
 
