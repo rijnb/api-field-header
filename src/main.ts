@@ -39,6 +39,11 @@ function createApp(): void {
       button:hover { background: #2563eb; }
       .actions { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
       .error { color: #dc2626; font-size: 0.85rem; margin-top: 4px; min-height: 1.2em; }
+      .warning {
+        background: #fffbeb; border: 1px solid #fcd34d; border-radius: 6px; padding: 10px 12px;
+        font-size: 0.82rem; color: #92400e; margin-top: 8px; line-height: 1.5;
+      }
+      .warning code { background: #fef3c7; padding: 1px 4px; border-radius: 3px; font-size: 0.8rem; }
       .preset-buttons { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
       .preset-btn {
         padding: 4px 10px; font-size: 0.78rem; font-weight: 500;
@@ -98,6 +103,7 @@ function createApp(): void {
       <div class="actions">
         <button id="apply-btn">Apply Filter</button>
       </div>
+      <div id="field-warning" class="warning" style="display:none"></div>
     </div>
 
     <div class="section result-section">
@@ -122,8 +128,47 @@ function createApp(): void {
     explicitInput.value = preset.explicit
   }
 
+  const fieldWarning = document.getElementById("field-warning")!
+
+  /**
+   * Collect all known dot-notation field paths from a JSON value.
+   * Arrays are transparent — their items are traversed with the same path prefix.
+   */
+  function collectKnownPaths(value: unknown, prefix: string[] = []): Set<string> {
+    const paths = new Set<string>()
+    if (value === null || typeof value !== "object") return paths
+
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        for (const p of collectKnownPaths(item, prefix)) paths.add(p)
+      }
+      return paths
+    }
+
+    for (const key of Object.keys(value as Record<string, unknown>)) {
+      const childPath = [...prefix, key]
+      paths.add(childPath.join("."))
+      for (const p of collectKnownPaths((value as Record<string, unknown>)[key], childPath)) {
+        paths.add(p)
+      }
+    }
+    return paths
+  }
+
+  /**
+   * Check whether a dot-notation field path (or any prefix/descendant of it)
+   * matches a known path in the JSON. A field is considered "known" if:
+   * - It exactly matches a known path.
+  */
+  function isFieldKnown(field: string, knownPaths: Set<string>): boolean {
+    return knownPaths.has(field);
+
+  }
+
   function applyFilter(): void {
     jsonError.textContent = ""
+    fieldWarning.style.display = "none"
+    fieldWarning.innerHTML = ""
 
     let parsed: unknown
     try {
@@ -138,6 +183,37 @@ function createApp(): void {
       .split(/[,\n]/)
       .map((entry) => entry.trim())
       .filter((entry) => entry.length > 0)
+
+    // Validate fields against the input JSON.
+    const knownPaths = collectKnownPaths(parsed)
+
+    const includeRaw = includeInput.value.trim()
+    const includeFields = includeRaw === "*" || includeRaw.length === 0
+      ? []
+      : includeRaw.split(",").map((e) => e.trim()).filter((e) => e.length > 0)
+    const excludeFields = excludeInput.value.trim().length === 0
+      ? []
+      : excludeInput.value.split(",").map((e) => e.trim()).filter((e) => e.length > 0)
+
+    const unknownInclude = includeFields.filter((f) => !isFieldKnown(f, knownPaths))
+    const unknownExclude = excludeFields.filter((f) => !isFieldKnown(f, knownPaths))
+    const unknownExplicit = explicitFields.filter((f) => !isFieldKnown(f, knownPaths))
+
+    const warnings: string[] = []
+    if (unknownInclude.length > 0) {
+      warnings.push(`<strong>Inclusion:</strong> ${unknownInclude.map((f) => `<code>${f}</code>`).join(", ")}`)
+    }
+    if (unknownExclude.length > 0) {
+      warnings.push(`<strong>Exclusion:</strong> ${unknownExclude.map((f) => `<code>${f}</code>`).join(", ")}`)
+    }
+    if (unknownExplicit.length > 0) {
+      warnings.push(`<strong>Explicit:</strong> ${unknownExplicit.map((f) => `<code>${f}</code>`).join(", ")}`)
+    }
+
+    if (warnings.length > 0) {
+      fieldWarning.innerHTML = `⚠️ Unknown fields (not found in JSON):<br>${warnings.join("<br>")}`
+      fieldWarning.style.display = "block"
+    }
 
     const filter = new FieldFilter({
       include: includeInput.value,

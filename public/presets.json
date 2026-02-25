@@ -34,7 +34,7 @@
       "name": "Guidance response with lanes",
       "include": "routes, formatVersion",
       "exclude": "routes.guidance",
-      "explicit": "routes.legs.points, routes.legs.sections",
+      "explicit": "routes.legs.points, routes.sections.lanes",
       "response": {
         "formatVersion": "0.0.12",
         "routes": [
