@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { FieldFilter } from "./FieldFilter"
+import { FieldFilter, parseFieldList } from "./FieldFilter"
 
 /**
  * Test JSON matching the tree from the design document:
@@ -341,6 +341,265 @@ describe("FieldFilter", () => {
         include: "  a ,  c  ",
       })
       expect(filter.apply(input)).toEqual({ a: 1, c: 3 })
+    })
+  })
+
+  describe("parseFieldList", () => {
+    it("parses simple dot-notation", () => {
+      expect(parseFieldList("a.b, a.c")).toEqual([
+        ["a", "b"],
+        ["a", "c"],
+      ])
+    })
+
+    it("parses parenthesized set notation", () => {
+      expect(parseFieldList("a(b, c)")).toEqual([
+        ["a", "b"],
+        ["a", "c"],
+      ])
+    })
+
+    it("parses nested parenthesized notation", () => {
+      expect(parseFieldList("a(x(p, q))")).toEqual([
+        ["a", "x", "p"],
+        ["a", "x", "q"],
+      ])
+    })
+
+    it("parses wildcard inside parentheses", () => {
+      expect(parseFieldList("a(x(*))")).toEqual([["a", "x", "*"]])
+    })
+
+    it("parses top-level wildcard inside parentheses", () => {
+      expect(parseFieldList("a(*)")).toEqual([["a", "*"]])
+    })
+
+    it("parses mixed dot-notation and parentheses", () => {
+      expect(parseFieldList("a.b, a(c, d)")).toEqual([
+        ["a", "b"],
+        ["a", "c"],
+        ["a", "d"],
+      ])
+    })
+
+    it("parses dot after parenthesized group via nesting", () => {
+      expect(parseFieldList("a(b.x, c)")).toEqual([
+        ["a", "b", "x"],
+        ["a", "c"],
+      ])
+    })
+
+    it("handles whitespace around parentheses", () => {
+      expect(parseFieldList("a ( b , c )")).toEqual([
+        ["a", "b"],
+        ["a", "c"],
+      ])
+    })
+
+    it("returns empty array for empty input", () => {
+      expect(parseFieldList("")).toEqual([])
+      expect(parseFieldList("   ")).toEqual([])
+    })
+
+    it("parses wildcard mixed with fields inside parentheses", () => {
+      expect(parseFieldList("A(*, B.X)")).toEqual([
+        ["A", "*"],
+        ["A", "B", "X"],
+      ])
+    })
+
+    it("parses wildcard mixed with nested parentheses", () => {
+      expect(parseFieldList("A(*, B(X))")).toEqual([
+        ["A", "*"],
+        ["A", "B", "X"],
+      ])
+    })
+  })
+
+  describe("parenthesized set notation in FieldFilter", () => {
+    it('"a(b, c)" is equivalent to "a.b, a.c"', () => {
+      const input = { a: { b: 1, c: 2, d: 3 } }
+      const dotFilter = new FieldFilter({ include: "a.b, a.c" })
+      const parenFilter = new FieldFilter({ include: "a(b, c)" })
+      expect(parenFilter.apply(input)).toEqual(dotFilter.apply(input))
+      expect(parenFilter.apply(input)).toEqual({ a: { b: 1, c: 2 } })
+    })
+
+    it('"A(B(X, Y), C)" is equivalent to "A.B.X, A.B.Y, A.C"', () => {
+      const filter = new FieldFilter({
+        include: "A(B(X, Y), C)",
+        explicitFields,
+      })
+      expect(filter.apply(fullObject)).toEqual({
+        A: {
+          B: {
+            X: {
+              P: "p-value",
+            },
+            Y: "y-value",
+          },
+          C: {
+            Z: "z-value",
+          },
+        },
+      })
+    })
+
+    it("wildcard inside parentheses selects all children", () => {
+      const input = {
+        a: {
+          x: { p: 1, q: 2 },
+          y: 3,
+        },
+      }
+      const filter = new FieldFilter({ include: "a(x(*))" })
+      expect(filter.apply(input)).toEqual({
+        a: {
+          x: { p: 1, q: 2 },
+        },
+      })
+    })
+
+    it("a(*) selects all children of a", () => {
+      const input = {
+        a: { b: 1, c: 2 },
+        d: 3,
+      }
+      const filter = new FieldFilter({ include: "a(*)" })
+      expect(filter.apply(input)).toEqual({
+        a: { b: 1, c: 2 },
+      })
+    })
+
+    it("wildcard in parentheses does not include explicit fields", () => {
+      const filter = new FieldFilter({
+        include: "A(B(*), C)",
+        explicitFields,
+      })
+      expect(filter.apply(fullObject)).toEqual({
+        A: {
+          B: {
+            Y: "y-value",
+          },
+          C: {
+            Z: "z-value",
+          },
+        },
+      })
+    })
+
+    it("parenthesized notation in exclusion list", () => {
+      const input = { a: { b: 1, c: 2, d: 3 } }
+      const filter = new FieldFilter({
+        include: "a",
+        exclude: "a(b, d)",
+      })
+      expect(filter.apply(input)).toEqual({ a: { c: 2 } })
+    })
+
+    it("nested parenthesized exclusion", () => {
+      const filter = new FieldFilter({
+        include: "A, A.B.X",
+        exclude: "A(C)",
+        explicitFields,
+      })
+      expect(filter.apply(fullObject)).toEqual({
+        A: {
+          B: {
+            X: {
+              P: "p-value",
+            },
+            Y: "y-value",
+          },
+        },
+      })
+    })
+
+    it('"A(*, B.X)" is equivalent to "A, A.B.X"', () => {
+      const filter = new FieldFilter({
+        include: "A(*, B.X)",
+        explicitFields,
+      })
+      expect(filter.apply(fullObject)).toEqual({
+        A: {
+          B: {
+            X: {
+              P: "p-value",
+            },
+            Y: "y-value",
+          },
+          C: {
+            Z: "z-value",
+          },
+        },
+      })
+    })
+
+    it('"A(*, B(X))" is equivalent to "A, A.B.X"', () => {
+      const filter = new FieldFilter({
+        include: "A(*, B(X))",
+        explicitFields,
+      })
+      expect(filter.apply(fullObject)).toEqual({
+        A: {
+          B: {
+            X: {
+              P: "p-value",
+            },
+            Y: "y-value",
+          },
+          C: {
+            Z: "z-value",
+          },
+        },
+      })
+    })
+
+    it('"A(*, B(X(Q)))" is equivalent to "A, A.B.X.Q"', () => {
+      const filter = new FieldFilter({
+        include: "A(*, B(X(Q)))",
+        explicitFields,
+      })
+      expect(filter.apply(fullObject)).toEqual({
+        A: {
+          B: {
+            X: {
+              Q: "q-value",
+            },
+            Y: "y-value",
+          },
+          C: {
+            Z: "z-value",
+          },
+        },
+      })
+    })
+
+    it("deeply nested parenthesized notation", () => {
+      const input = {
+        level1: {
+          level2: {
+            level3: {
+              target: "found",
+              other: "skip",
+            },
+            sibling: "skip",
+          },
+          another: "skip",
+        },
+      }
+      const filter = new FieldFilter({
+        include: "level1(level2(level3(target)))",
+      })
+      expect(filter.apply(input)).toEqual({
+        level1: {
+          level2: {
+            level3: {
+              target: "found",
+            },
+          },
+        },
+      })
     })
   })
 })
