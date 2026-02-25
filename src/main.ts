@@ -127,7 +127,7 @@ function createApp(): void {
 
     <div class="section result-section">
       <label for="node-input">
-        Check if this node exists in the response <span class="hint">(dot-notation field name)</span>
+        Check if this node exists in the filtered response <span class="hint">(dot-notation field name)</span>
       </label>
       <div class="node-check">
         <input type="text" id="node-input" placeholder="e.g. routes.legs.points" />
@@ -269,11 +269,18 @@ function createApp(): void {
       return
     }
 
+    const outputText = jsonOutput.value.trim()
+    if (outputText.length === 0 || outputText === "(entire object was excluded)") {
+      nodeResult.textContent = "No filtered response available"
+      nodeResult.className = "node-result absent"
+      return
+    }
+
     let parsed: unknown
     try {
-      parsed = JSON.parse(jsonInput.value)
+      parsed = JSON.parse(outputText)
     } catch {
-      nodeResult.textContent = "Cannot check — invalid JSON input"
+      nodeResult.textContent = "Cannot check — invalid filtered response"
       nodeResult.className = "node-result absent"
       return
     }
