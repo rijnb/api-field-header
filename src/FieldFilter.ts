@@ -211,7 +211,7 @@ export class FieldFilter {
       const childPath = [...currentPath, key]
 
       // Rule: exclusion overrides everything.
-      if (this.isExcluded(childPath, excludeNode, key)) {
+      if (this.isExcluded(excludeNode, key)) {
         continue
       }
 
@@ -236,17 +236,11 @@ export class FieldFilter {
   /**
    * Check if a field path is excluded.
    */
-  private isExcluded(
-    path: string[],
-    excludeNode: FieldNode,
-    key: string,
-  ): boolean {
+  private isExcluded(excludeNode: FieldNode, key: string): boolean {
     // Excluded if this key is in the exclude tree and it's a leaf
     // (no more children means "exclude this and everything below").
-    if (key in excludeNode && Object.keys(excludeNode[key]!).length === 0) {
-      return true
-    }
-    return false
+    return key in excludeNode && Object.keys(excludeNode[key]!).length === 0;
+
   }
 
   /**
@@ -271,30 +265,16 @@ export class FieldFilter {
     }
 
     // EXPLICIT fields require exact mention in the inclusion list.
-    if (isExplicit) {
-      // The field itself or one of its descendants must be explicitly listed.
-      return (
-        isPathExplicitlyListed(this.includePaths, path) ||
-        isPathOrDescendantListed(this.includePaths, path)
-      )
+    // Similarly, non-explicit fields behind an unincluded EXPLICIT ancestor
+    // are "gated" — an ancestor above the gate cannot grant implicit access.
+    // In both cases, the field itself or a descendant must be in the include list.
+    if (isExplicit || this.hasUnincludedExplicitAncestor(path)) {
+      return isPathOrDescendantListed(this.includePaths, path)
     }
 
-    // Non-explicit field: included if it or an ancestor is in the inclusion list,
-    // or if a descendant is listed (we need to traverse to reach it).
-    // But if any ancestor is EXPLICIT and was not explicitly included, this
-    // field is gated behind that ancestor — a non-explicit parent above the
-    // gate cannot grant access through it.
-    if (this.hasUnincludedExplicitAncestor(path)) {
-      // Only include if this exact path or a descendant is in the include list.
-      // An ancestor above the EXPLICIT gate does NOT grant implicit access.
-      return (
-        isPathExplicitlyListed(this.includePaths, path) ||
-        isPathOrDescendantListed(this.includePaths, path)
-      )
-    }
-
+    // Non-explicit field without an explicit gate: included if it, an ancestor,
+    // or a descendant is in the inclusion list.
     return (
-      isPathExplicitlyListed(this.includePaths, path) ||
       isAncestorListed(this.includePaths, path) ||
       isPathOrDescendantListed(this.includePaths, path)
     )
