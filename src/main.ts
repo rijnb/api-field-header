@@ -1,24 +1,14 @@
 import { FieldFilter } from "./FieldFilter"
 
-const SAMPLE_JSON = JSON.stringify(
-  {
-    A: {
-      B: {
-        X: { P: "p-value", Q: "q-value" },
-        Y: "y-value",
-      },
-      C: {
-        Z: "z-value",
-      },
-    },
-  },
-  null,
-  2,
-)
-
-const SAMPLE_INCLUDE = "A"
-const SAMPLE_EXCLUDE = ""
-const SAMPLE_EXPLICIT = "A.B.X\nA.B.X.Q"
+interface Preset {
+  preset: {
+    name: string
+    include: string
+    exclude: string
+    explicit: string
+    response: unknown
+  }
+}
 
 function createApp(): void {
   const app = document.getElementById("app")!
@@ -49,6 +39,13 @@ function createApp(): void {
       button:hover { background: #2563eb; }
       .actions { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
       .error { color: #dc2626; font-size: 0.85rem; margin-top: 4px; min-height: 1.2em; }
+      .preset-buttons { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+      .preset-btn {
+        padding: 4px 10px; font-size: 0.78rem; font-weight: 500;
+        background: #e5e7eb; color: #374151; border: 1px solid #d1d5db; border-radius: 4px;
+        cursor: pointer; transition: background 0.15s;
+      }
+      .preset-btn:hover { background: #d1d5db; }
       .section { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
       .result-section { margin-top: 16px; }
       .info-box {
@@ -78,7 +75,8 @@ function createApp(): void {
       <div class="grid">
         <div class="full">
           <label for="json-input">JSON Input</label>
-          <textarea id="json-input" class="json-input" spellcheck="false">${escapeHtml(SAMPLE_JSON)}</textarea>
+          <div id="preset-buttons" class="preset-buttons"></div>
+          <textarea id="json-input" class="json-input" spellcheck="false"></textarea>
           <div id="json-error" class="error"></div>
         </div>
 
@@ -86,21 +84,21 @@ function createApp(): void {
           <label for="include-input">
             Field Inclusion <span class="hint">(Attributes header)</span>
           </label>
-          <input type="text" id="include-input" value="${escapeHtml(SAMPLE_INCLUDE)}" placeholder='e.g. A.B, A.C or *' />
+          <input type="text" id="include-input" value="" placeholder='e.g. A.B, A.C or *' />
         </div>
 
         <div>
           <label for="exclude-input">
             Field Exclusion <span class="hint">(Attributes-Excluded header)</span>
           </label>
-          <input type="text" id="exclude-input" value="${escapeHtml(SAMPLE_EXCLUDE)}" placeholder="e.g. A.B.X.P" />
+          <input type="text" id="exclude-input" value="" placeholder="e.g. A.B.X.P" />
         </div>
 
         <div class="full">
           <label for="explicit-input">
-            Explicit Fields <span class="hint">(one per line, dot-notation)</span>
+            Explicit Fields <span class="hint">(comma or newline separated, dot-notation)</span>
           </label>
-          <textarea id="explicit-input" rows="3" spellcheck="false">${escapeHtml(SAMPLE_EXPLICIT)}</textarea>
+          <textarea id="explicit-input" rows="3" spellcheck="false"></textarea>
         </div>
       </div>
 
@@ -127,6 +125,14 @@ function createApp(): void {
   const jsonOutput = document.getElementById("json-output") as HTMLTextAreaElement
   const jsonError = document.getElementById("json-error")!
   const applyBtn = document.getElementById("apply-btn") as HTMLButtonElement
+  const presetButtonsContainer = document.getElementById("preset-buttons")!
+
+  function applyPreset(preset: Preset["preset"]): void {
+    jsonInput.value = JSON.stringify(preset.response, null, 2)
+    includeInput.value = preset.include
+    excludeInput.value = preset.exclude
+    explicitInput.value = preset.explicit
+  }
 
   function applyFilter(): void {
     jsonError.textContent = ""
@@ -141,9 +147,9 @@ function createApp(): void {
     }
 
     const explicitFields = explicitInput.value
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0)
+      .split(/[,\n]/)
+      .map((entry) => entry.trim())
+      .filter((entry) => entry.length > 0)
 
     const filter = new FieldFilter({
       include: includeInput.value,
@@ -158,16 +164,30 @@ function createApp(): void {
 
   applyBtn.addEventListener("click", applyFilter)
 
-  // Apply on load to show initial result.
-  applyFilter()
-}
+  // Load presets from presets.json and create buttons dynamically.
+  fetch("/presets.json")
+    .then((response) => response.json())
+    .then((presets: Preset[]) => {
+      presets.forEach((entry) => {
+        const btn = document.createElement("button")
+        btn.className = "preset-btn"
+        btn.textContent = entry.preset.name
+        btn.addEventListener("click", () => {
+          applyPreset(entry.preset)
+        })
+        presetButtonsContainer.appendChild(btn)
+      })
 
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
+      // Apply the first preset on load to show initial result.
+      const first = presets[0]
+      if (first) {
+        applyPreset(first.preset)
+        applyFilter()
+      }
+    })
+    .catch((e) => {
+      jsonError.textContent = `Failed to load presets: ${(e as Error).message}`
+    })
 }
 
 createApp()

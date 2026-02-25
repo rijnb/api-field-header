@@ -1,0 +1,2126 @@
+[
+  {
+    "preset": {
+      "name": "Simple example",
+      "include": "tree-1",
+      "exclude": "tree-1.sub-2",
+      "explicit": "tree-1.sub-1.array.y",
+      "response": {
+        "tree-1": {
+          "sub-1": {
+            "array": [
+              {
+                "x": "x-1",
+                "y": "y-1"
+              },
+              {
+                "x": "x-2",
+                "y": "x-2"
+              }
+            ],
+            "leaf": "leaf"
+          },
+          "sub-2": {
+            "elm-1": "elm-1",
+            "elm-2": "elm-2"
+          }
+        }
+      },
+      "tree-2" : "top-2"
+    }
+  },
+  {
+    "preset": {
+      "name": "Guidance response with lanes",
+      "include": "routes, formatVersion",
+      "exclude": "routes.guidance",
+      "explicit": "routes.legs.points, routes.legs.sections",
+      "response": {
+        "formatVersion": "0.0.12",
+        "routes": [
+          {
+            "summary": {
+              "lengthInMeters": 13995,
+              "travelTimeInSeconds": 1874,
+              "trafficDelayInSeconds": 0,
+              "trafficLengthInMeters": 0,
+              "departureTime": "2025-12-05T18:04:21+01:00",
+              "arrivalTime": "2025-12-05T18:35:35+01:00",
+              "fuelConsumptionInLiters": 0.861754
+            },
+            "legs": [
+              {
+                "summary": {
+                  "lengthInMeters": 13995,
+                  "travelTimeInSeconds": 1874,
+                  "trafficDelayInSeconds": 0,
+                  "trafficLengthInMeters": 0,
+                  "departureTime": "2025-12-05T18:04:21+01:00",
+                  "arrivalTime": "2025-12-05T18:35:35+01:00",
+                  "fuelConsumptionInLiters": 0.861754
+                },
+                "points": [
+                  {
+                    "latitude": 52.52949,
+                    "longitude": 13.32396
+                  },
+                  {
+                    "latitude": 52.52978,
+                    "longitude": 13.32396
+                  },
+                  {
+                    "latitude": 52.60366,
+                    "longitude": 13.42547,
+                    "note": "other latitude and longitude pairs were omitted for brevity"
+                  }
+                ]
+              }
+            ],
+            "sections": [
+              {
+                "lanes": [
+                  {
+                    "directions": []
+                  },
+                  {
+                    "directions": []
+                  },
+                  {
+                    "directions": []
+                  }
+                ],
+                "laneSeparators": [
+                  "SINGLE_SOLID",
+                  "LONG_DASHED",
+                  "LONG_DASHED",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 44,
+                "endPointIndex": 45,
+                "sectionType": "LANES"
+              },
+              {
+                "lanes": [
+                  {
+                    "directions": []
+                  },
+                  {
+                    "directions": []
+                  },
+                  {
+                    "directions": []
+                  },
+                  {
+                    "directions": []
+                  }
+                ],
+                "laneSeparators": [
+                  "SINGLE_SOLID",
+                  "LONG_DASHED",
+                  "LONG_DASHED",
+                  "LONG_DASHED",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 143,
+                "endPointIndex": 144,
+                "sectionType": "LANES"
+              },
+              {
+                "lanes": [
+                  {
+                    "directions": []
+                  }
+                ],
+                "laneSeparators": [
+                  "LONG_DASHED",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 178,
+                "endPointIndex": 179,
+                "sectionType": "LANES"
+              },
+              {
+                "lanes": [
+                  {
+                    "directions": [
+                      "LEFT",
+                      "RIGHT"
+                    ]
+                  }
+                ],
+                "laneSeparators": [
+                  "SINGLE_SOLID",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 209,
+                "endPointIndex": 210,
+                "sectionType": "LANES"
+              },
+              {
+                "lanes": [
+                  {
+                    "directions": []
+                  },
+                  {
+                    "directions": []
+                  }
+                ],
+                "laneSeparators": [
+                  "SINGLE_SOLID",
+                  "LONG_DASHED",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 334,
+                "endPointIndex": 335,
+                "sectionType": "LANES"
+              },
+              {
+                "lanes": [
+                  {
+                    "directions": []
+                  },
+                  {
+                    "directions": []
+                  },
+                  {
+                    "directions": []
+                  }
+                ],
+                "laneSeparators": [
+                  "SINGLE_SOLID",
+                  "LONG_DASHED",
+                  "LONG_DASHED",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 350,
+                "endPointIndex": 351,
+                "sectionType": "LANES"
+              },
+              {
+                "lanes": [
+                  {
+                    "directions": [
+                      "RIGHT",
+                      "STRAIGHT"
+                    ],
+                    "follow": "RIGHT"
+                  }
+                ],
+                "laneSeparators": [
+                  "SINGLE_SOLID",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 510,
+                "endPointIndex": 511,
+                "sectionType": "LANES"
+              },
+              {
+                "lanes": [
+                  {
+                    "directions": [
+                      "RIGHT"
+                    ]
+                  }
+                ],
+                "laneSeparators": [
+                  "SINGLE_SOLID",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 627,
+                "endPointIndex": 628,
+                "sectionType": "LANES"
+              },
+              {
+                "lanes": [
+                  {
+                    "directions": [
+                      "STRAIGHT",
+                      "LEFT_U_TURN"
+                    ]
+                  },
+                  {
+                    "directions": [
+                      "RIGHT",
+                      "STRAIGHT"
+                    ],
+                    "follow": "RIGHT"
+                  }
+                ],
+                "laneSeparators": [
+                  "SINGLE_SOLID",
+                  "LONG_DASHED",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 689,
+                "endPointIndex": 690,
+                "sectionType": "LANES"
+              },
+              {
+                "lanes": [
+                  {
+                    "directions": []
+                  },
+                  {
+                    "directions": [
+                      "RIGHT",
+                      "STRAIGHT"
+                    ],
+                    "follow": "RIGHT"
+                  }
+                ],
+                "laneSeparators": [
+                  "SINGLE_SOLID",
+                  "LONG_DASHED",
+                  "SINGLE_SOLID"
+                ],
+                "properties": [
+                  "IS_MANEUVER"
+                ],
+                "startPointIndex": 756,
+                "endPointIndex": 757,
+                "sectionType": "LANES"
+              }
+            ],
+            "guidance": {
+              "instructions": [
+                {
+                  "drivingSide": "RIGHT",
+                  "isEnforcedAtForkPoint": false,
+                  "maneuver": "DEPART",
+                  "maneuverPoint": {
+                    "latitude": 52.52949,
+                    "longitude": 13.32396
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "streetName": {
+                      "text": ""
+                    }
+                  },
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "streetName": {
+                      "text": ""
+                    }
+                  },
+                  "routeOffsetInMeters": 0,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 0,
+                      "point": {
+                        "latitude": 52.52949,
+                        "longitude": 13.32396
+                      },
+                      "travelTimeInSeconds": 0
+                    }
+                  ],
+                  "sideRoads": []
+                },
+                {
+                  "changeOfAngleInDegrees": 84,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_RIGHT",
+                  "maneuverPoint": {
+                    "latitude": 52.53203,
+                    "longitude": 13.32344
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "LEFT"
+                    ],
+                    "onRouteAngle": "RIGHT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'zI.kInK.$n.StR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Sickingenstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'zI.kInK.$n.StR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Sickingenstraße"
+                    }
+                  },
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "streetName": {
+                      "text": ""
+                    }
+                  },
+                  "routeOffsetInMeters": 297,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 297,
+                      "point": {
+                        "latitude": 52.53203,
+                        "longitude": 13.32344
+                      },
+                      "travelTimeInSeconds": 156
+                    },
+                    {
+                      "distanceInMeters": 304,
+                      "point": {
+                        "latitude": 52.53205,
+                        "longitude": 13.32354
+                      },
+                      "travelTimeInSeconds": 157
+                    }
+                  ],
+                  "sideRoads": []
+                },
+                {
+                  "changeOfAngleInDegrees": -79,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_LEFT",
+                  "maneuverPoint": {
+                    "latitude": 52.53295,
+                    "longitude": 13.32852
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "STRAIGHT",
+                      "RIGHT"
+                    ],
+                    "onRouteAngle": "LEFT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'bO&I.s$l.StR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Beusselstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'bO&I.s$l.StR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Beusselstraße"
+                    }
+                  },
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'zI.kInK.$n.StR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Sickingenstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'zI.kInK.$n.StR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Sickingenstraße"
+                    }
+                  },
+                  "routeOffsetInMeters": 644,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 644,
+                      "point": {
+                        "latitude": 52.53294,
+                        "longitude": 13.32834
+                      },
+                      "travelTimeInSeconds": 224
+                    },
+                    {
+                      "distanceInMeters": 657,
+                      "point": {
+                        "latitude": 52.53295,
+                        "longitude": 13.32852
+                      },
+                      "travelTimeInSeconds": 226
+                    },
+                    {
+                      "distanceInMeters": 667,
+                      "point": {
+                        "latitude": 52.53304,
+                        "longitude": 13.32851
+                      },
+                      "travelTimeInSeconds": 227
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 254,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 126,
+                      "side": "RIGHT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": 84,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_RIGHT",
+                  "maneuverPoint": {
+                    "latitude": 52.53772,
+                    "longitude": 13.32646
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "STRAIGHT"
+                    ],
+                    "onRouteAngle": "RIGHT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'si.stR+As",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Seestraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'si.stR+As",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Seestraße"
+                    }
+                  },
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'bO&I.s$l.StR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Beusselstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'bO&I.s$l.StR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Beusselstraße"
+                    }
+                  },
+                  "routeOffsetInMeters": 1215,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 1215,
+                      "point": {
+                        "latitude": 52.53772,
+                        "longitude": 13.32646
+                      },
+                      "travelTimeInSeconds": 291
+                    },
+                    {
+                      "distanceInMeters": 1232,
+                      "point": {
+                        "latitude": 52.53787,
+                        "longitude": 13.3265
+                      },
+                      "travelTimeInSeconds": 297
+                    },
+                    {
+                      "distanceInMeters": 1240,
+                      "point": {
+                        "latitude": 52.53794,
+                        "longitude": 13.32653
+                      },
+                      "travelTimeInSeconds": 299
+                    },
+                    {
+                      "distanceInMeters": 1244,
+                      "point": {
+                        "latitude": 52.53797,
+                        "longitude": 13.32656
+                      },
+                      "travelTimeInSeconds": 300
+                    },
+                    {
+                      "distanceInMeters": 1258,
+                      "point": {
+                        "latitude": 52.53807,
+                        "longitude": 13.32668
+                      },
+                      "travelTimeInSeconds": 305
+                    },
+                    {
+                      "distanceInMeters": 1263,
+                      "point": {
+                        "latitude": 52.5381,
+                        "longitude": 13.32674
+                      },
+                      "travelTimeInSeconds": 306
+                    },
+                    {
+                      "distanceInMeters": 1275,
+                      "point": {
+                        "latitude": 52.53816,
+                        "longitude": 13.32688
+                      },
+                      "travelTimeInSeconds": 310
+                    },
+                    {
+                      "distanceInMeters": 1281,
+                      "point": {
+                        "latitude": 52.53818,
+                        "longitude": 13.32696
+                      },
+                      "travelTimeInSeconds": 311
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 356,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 348,
+                      "side": "RIGHT"
+                    }
+                  ],
+                  "signpost": {
+                    "exitName": {
+                      "text": ""
+                    },
+                    "exitNumber": {
+                      "text": ""
+                    },
+                    "towardName": {
+                      "phonetic": "'pR+Ent.sla&U.$R+_'bE0g",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Prenzlauer Berg"
+                    }
+                  }
+                },
+                {
+                  "changeOfAngleInDegrees": -90,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_LEFT",
+                  "maneuverPoint": {
+                    "latitude": 52.54618,
+                    "longitude": 13.34424
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "STRAIGHT",
+                      "RIGHT"
+                    ],
+                    "onRouteAngle": "LEFT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "A.fR+i.'kA.nI.S$_'stR+@.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Afrikanische Straße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "A.fR+i.'kA.nI.S$_'stR+@.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Afrikanische Straße"
+                    }
+                  },
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'si.stR+As",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Seestraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'si.stR+As",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Seestraße"
+                    }
+                  },
+                  "routeOffsetInMeters": 2743,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 2743,
+                      "point": {
+                        "latitude": 52.54608,
+                        "longitude": 13.34406
+                      },
+                      "travelTimeInSeconds": 515
+                    },
+                    {
+                      "distanceInMeters": 2760,
+                      "point": {
+                        "latitude": 52.54618,
+                        "longitude": 13.34424
+                      },
+                      "travelTimeInSeconds": 517
+                    },
+                    {
+                      "distanceInMeters": 2776,
+                      "point": {
+                        "latitude": 52.54629,
+                        "longitude": 13.3441
+                      },
+                      "travelTimeInSeconds": 520
+                    },
+                    {
+                      "distanceInMeters": 2779,
+                      "point": {
+                        "latitude": 52.54631,
+                        "longitude": 13.34406
+                      },
+                      "travelTimeInSeconds": 521
+                    },
+                    {
+                      "distanceInMeters": 2794,
+                      "point": {
+                        "latitude": 52.54642,
+                        "longitude": 13.34392
+                      },
+                      "travelTimeInSeconds": 524
+                    },
+                    {
+                      "distanceInMeters": 2801,
+                      "point": {
+                        "latitude": 52.54646,
+                        "longitude": 13.34386
+                      },
+                      "travelTimeInSeconds": 524
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 729,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 669,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 465,
+                      "side": "RIGHT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": 68,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_RIGHT",
+                  "maneuverPoint": {
+                    "latitude": 52.55035,
+                    "longitude": 13.33912
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "SHARP_LEFT",
+                      "STRAIGHT"
+                    ],
+                    "onRouteAngle": "RIGHT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "tR+Ans.'vAl.StR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Transvaalstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "tR+Ans.'vAl.StR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Transvaalstraße"
+                    }
+                  },
+                  "offsetOfAmbiguousExitFromManeuverInMeters": 384,
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "A.fR+i.'kA.nI.S$_'stR+@.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Afrikanische Straße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "A.fR+i.'kA.nI.S$_'stR+@.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Afrikanische Straße"
+                    }
+                  },
+                  "routeOffsetInMeters": 3343,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 3343,
+                      "point": {
+                        "latitude": 52.55035,
+                        "longitude": 13.33912
+                      },
+                      "travelTimeInSeconds": 587
+                    },
+                    {
+                      "distanceInMeters": 3353,
+                      "point": {
+                        "latitude": 52.55042,
+                        "longitude": 13.33922
+                      },
+                      "travelTimeInSeconds": 588
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 510,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 384,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 375,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 286,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 195,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 104,
+                      "side": "LEFT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": 0,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "maneuver": "STRAIGHT",
+                  "maneuverPoint": {
+                    "latitude": 52.55429,
+                    "longitude": 13.34511
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "LEFT",
+                      "RIGHT"
+                    ],
+                    "onRouteAngle": "STRAIGHT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'bAR+.fus.StR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Barfusstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'bAR+.fus.StR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Barfusstraße"
+                    }
+                  },
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "tR+Ans.'vAl.StR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Transvaalstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "tR+Ans.'vAl.StR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Transvaalstraße"
+                    }
+                  },
+                  "routeOffsetInMeters": 3940,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 3940,
+                      "point": {
+                        "latitude": 52.55429,
+                        "longitude": 13.34511
+                      },
+                      "travelTimeInSeconds": 704
+                    },
+                    {
+                      "distanceInMeters": 3952,
+                      "point": {
+                        "latitude": 52.55436,
+                        "longitude": 13.34522
+                      },
+                      "travelTimeInSeconds": 706
+                    },
+                    {
+                      "distanceInMeters": 3962,
+                      "point": {
+                        "latitude": 52.55443,
+                        "longitude": 13.34532
+                      },
+                      "travelTimeInSeconds": 707
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 477,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 285,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 139,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 139,
+                      "side": "RIGHT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": -56,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": true,
+                  "maneuver": "TURN_LEFT",
+                  "maneuverPoint": {
+                    "latitude": 52.56059,
+                    "longitude": 13.35467
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [],
+                    "onRouteAngle": "SLIGHT_LEFT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "A.'R+O.z$R+_'@.le&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Aroser Allee"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "A.'R+O.z$R+_'@.le&I",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Aroser Allee"
+                    }
+                  },
+                  "offsetOfAmbiguousExitFromManeuverInMeters": 201,
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'bAR+.fus.StR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Barfusstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'bAR+.fus.StR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Barfusstraße"
+                    }
+                  },
+                  "routeOffsetInMeters": 4901,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 4901,
+                      "point": {
+                        "latitude": 52.56059,
+                        "longitude": 13.35467
+                      },
+                      "travelTimeInSeconds": 810
+                    },
+                    {
+                      "distanceInMeters": 4907,
+                      "point": {
+                        "latitude": 52.56064,
+                        "longitude": 13.35465
+                      },
+                      "travelTimeInSeconds": 810
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 868,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 674,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 674,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 347,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 347,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 201,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 26,
+                      "side": "RIGHT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": 90,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_RIGHT",
+                  "maneuverPoint": {
+                    "latitude": 52.57368,
+                    "longitude": 13.35211
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "LEFT"
+                    ],
+                    "onRouteAngle": "RIGHT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'lIn.da&U.$R+_'@.le&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Lindauer Allee"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "roadNumbers": [
+                      {
+                        "identifier": {
+                          "phonetic": "bi.na&In.tI.'sIks",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "B96"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "roadShields": [
+                      {
+                        "countryCode": "DEU",
+                        "iconReference": {
+                          "reference": "rectangle-yellow2-black-2",
+                          "shieldContent": "96"
+                        },
+                        "roadNumber": {
+                          "phonetic": "bi.na&In.tI.'sIks",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "B96"
+                        },
+                        "stateCode": ""
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'lIn.da&U.$R+_'@.le&I",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Lindauer Allee"
+                    }
+                  },
+                  "offsetOfAmbiguousExitFromManeuverInMeters": 258,
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "A.'R+O.z$R+_'@.le&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Aroser Allee"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "A.'R+O.z$R+_'@.le&I",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Aroser Allee"
+                    }
+                  },
+                  "routeOffsetInMeters": 6395,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 6395,
+                      "point": {
+                        "latitude": 52.57368,
+                        "longitude": 13.35211
+                      },
+                      "travelTimeInSeconds": 961
+                    },
+                    {
+                      "distanceInMeters": 6405,
+                      "point": {
+                        "latitude": 52.57366,
+                        "longitude": 13.35225
+                      },
+                      "travelTimeInSeconds": 962
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 868,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 868,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 769,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 690,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 690,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 482,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 482,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 369,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 258,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 146,
+                      "side": "LEFT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": -101,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_LEFT",
+                  "maneuverPoint": {
+                    "latitude": 52.57325,
+                    "longitude": 13.35897
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "STRAIGHT"
+                    ],
+                    "onRouteAngle": "LEFT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "R+e&I.zi.'dEnt.sStR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Residenzstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "R+e&I.zi.'dEnt.sStR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Residenzstraße"
+                    }
+                  },
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'lIn.da&U.$R+_'@.le&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Lindauer Allee"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "roadNumbers": [
+                      {
+                        "identifier": {
+                          "phonetic": "bi.na&In.tI.'sIks",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "B96"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "roadShields": [
+                      {
+                        "countryCode": "DEU",
+                        "iconReference": {
+                          "reference": "rectangle-yellow2-black-2",
+                          "shieldContent": "96"
+                        },
+                        "roadNumber": {
+                          "phonetic": "bi.na&In.tI.'sIks",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "B96"
+                        },
+                        "stateCode": ""
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'lIn.da&U.$R+_'@.le&I",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Lindauer Allee"
+                    }
+                  },
+                  "routeOffsetInMeters": 6864,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 6864,
+                      "point": {
+                        "latitude": 52.57325,
+                        "longitude": 13.35897
+                      },
+                      "travelTimeInSeconds": 1018
+                    },
+                    {
+                      "distanceInMeters": 6883,
+                      "point": {
+                        "latitude": 52.57342,
+                        "longitude": 13.359
+                      },
+                      "travelTimeInSeconds": 1028
+                    },
+                    {
+                      "distanceInMeters": 6892,
+                      "point": {
+                        "latitude": 52.5735,
+                        "longitude": 13.35901
+                      },
+                      "travelTimeInSeconds": 1030
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 86,
+                      "side": "RIGHT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": 68,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_RIGHT",
+                  "maneuverPoint": {
+                    "latitude": 52.59076,
+                    "longitude": 13.37101
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "STRAIGHT"
+                    ],
+                    "onRouteAngle": "RIGHT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "kA.'stA.nj$n.A.le&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Kastanienallee"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "kA.'stA.nj$n.A.le&I",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Kastanienallee"
+                    }
+                  },
+                  "offsetOfAmbiguousExitFromManeuverInMeters": 174,
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'ha&Upt.stR+As",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Hauptstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'ha&Upt.stR+As",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Hauptstraße"
+                    }
+                  },
+                  "routeOffsetInMeters": 8983,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 8983,
+                      "point": {
+                        "latitude": 52.59076,
+                        "longitude": 13.37101
+                      },
+                      "travelTimeInSeconds": 1332
+                    },
+                    {
+                      "distanceInMeters": 8992,
+                      "point": {
+                        "latitude": 52.59076,
+                        "longitude": 13.37115
+                      },
+                      "travelTimeInSeconds": 1333
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 965,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 857,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 808,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 728,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 728,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 649,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 649,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 543,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 439,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 347,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 347,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 174,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 174,
+                      "side": "RIGHT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": -68,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_LEFT",
+                  "maneuverPoint": {
+                    "latitude": 52.59317,
+                    "longitude": 13.40279
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "STRAIGHT",
+                      "SHARP_RIGHT"
+                    ],
+                    "onRouteAngle": "LEFT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'dit.sg$n.StR+A.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Dietzgenstraße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "roadNumbers": [
+                      {
+                        "identifier": {
+                          "phonetic": "bi.na&In.ti.'sIks_'e&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "B96a"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "roadShields": [
+                      {
+                        "countryCode": "DEU",
+                        "iconReference": {
+                          "reference": "rectangle-yellow2-black-3",
+                          "shieldContent": "96a"
+                        },
+                        "roadNumber": {
+                          "phonetic": "bi.na&In.ti.'sIks_'e&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "B96a"
+                        },
+                        "stateCode": ""
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'dit.sg$n.StR+A.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Dietzgenstraße"
+                    }
+                  },
+                  "offsetOfAmbiguousExitFromManeuverInMeters": 151,
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "kA.'stA.nj$n.A.le&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Kastanienallee"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "kA.'stA.nj$n.A.le&I",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Kastanienallee"
+                    }
+                  },
+                  "routeOffsetInMeters": 11168,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 11168,
+                      "point": {
+                        "latitude": 52.59317,
+                        "longitude": 13.40279
+                      },
+                      "travelTimeInSeconds": 1597
+                    },
+                    {
+                      "distanceInMeters": 11168,
+                      "point": {
+                        "latitude": 52.59317,
+                        "longitude": 13.40279
+                      },
+                      "travelTimeInSeconds": 1597
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 982,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 982,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 866,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 866,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 695,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 599,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 531,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 471,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 405,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 308,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 308,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 243,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 151,
+                      "side": "LEFT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": 90,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_RIGHT",
+                  "maneuverPoint": {
+                    "latitude": 52.60285,
+                    "longitude": 13.40215
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "STRAIGHT"
+                    ],
+                    "onRouteAngle": "RIGHT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'R+O.z$n.tA.l$R+_'ve&Ik",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Rosenthaler Weg"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'R+O.z$n.tA.l$R+_'ve&Ik",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Rosenthaler Weg"
+                    }
+                  },
+                  "offsetOfAmbiguousExitFromManeuverInMeters": 265,
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'blAnK.k$n.fEl.d$R+_'stR+@.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Blankenfelder Straße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "roadNumbers": [
+                      {
+                        "identifier": {
+                          "phonetic": "bi.na&In.ti.'sIks_'e&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "B96a"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "roadShields": [
+                      {
+                        "countryCode": "DEU",
+                        "iconReference": {
+                          "reference": "rectangle-yellow2-black-3",
+                          "shieldContent": "96a"
+                        },
+                        "roadNumber": {
+                          "phonetic": "bi.na&In.ti.'sIks_'e&I",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "B96a"
+                        },
+                        "stateCode": ""
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'blAnK.k$n.fEl.d$R+_'stR+@.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Blankenfelder Straße"
+                    }
+                  },
+                  "routeOffsetInMeters": 12255,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 12255,
+                      "point": {
+                        "latitude": 52.60285,
+                        "longitude": 13.40215
+                      },
+                      "travelTimeInSeconds": 1697
+                    },
+                    {
+                      "distanceInMeters": 12259,
+                      "point": {
+                        "latitude": 52.60287,
+                        "longitude": 13.40221
+                      },
+                      "travelTimeInSeconds": 1697
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 904,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 816,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 679,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": false,
+                      "offsetFromManeuverInMeters": 668,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 452,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 448,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 265,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 253,
+                      "side": "LEFT"
+                    }
+                  ]
+                },
+                {
+                  "changeOfAngleInDegrees": 90,
+                  "drivingSide": "RIGHT",
+                  "intersectionName": {
+                    "text": ""
+                  },
+                  "isEnforcedAtForkPoint": false,
+                  "isManeuverObligatory": false,
+                  "maneuver": "TURN_RIGHT",
+                  "maneuverPoint": {
+                    "latitude": 52.60617,
+                    "longitude": 13.4202
+                  },
+                  "maneuverView": {
+                    "offRouteAngles": [
+                      "LEFT",
+                      "STRAIGHT"
+                    ],
+                    "onRouteAngle": "RIGHT"
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'blAnK.k$n.fEl.d$R+_'stR+@.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Blankenfelder Straße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'blAnK.k$n.fEl.d$R+_'stR+@.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Blankenfelder Straße"
+                    }
+                  },
+                  "offsetOfAmbiguousExitFromManeuverInMeters": 115,
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'R+O.z$n.tA.l$R+_'ve&Ik",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Rosenthaler Weg"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'R+O.z$n.tA.l$R+_'ve&Ik",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Rosenthaler Weg"
+                    }
+                  },
+                  "routeOffsetInMeters": 13541,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 13541,
+                      "point": {
+                        "latitude": 52.60617,
+                        "longitude": 13.4202
+                      },
+                      "travelTimeInSeconds": 1835
+                    },
+                    {
+                      "distanceInMeters": 13545,
+                      "point": {
+                        "latitude": 52.60615,
+                        "longitude": 13.42024
+                      },
+                      "travelTimeInSeconds": 1835
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": false,
+                      "offsetFromManeuverInMeters": 423,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 307,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 222,
+                      "side": "LEFT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 222,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 115,
+                      "side": "RIGHT"
+                    }
+                  ]
+                },
+                {
+                  "drivingSide": "RIGHT",
+                  "isEnforcedAtForkPoint": false,
+                  "maneuver": "ARRIVE_LEFT",
+                  "maneuverPoint": {
+                    "latitude": 52.60366,
+                    "longitude": 13.42547
+                  },
+                  "nextRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'blAnK.k$n.fEl.d$R+_'stR+@.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Blankenfelder Straße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'blAnK.k$n.fEl.d$R+_'stR+@.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Blankenfelder Straße"
+                    }
+                  },
+                  "previousRoadInfo": {
+                    "countryCode": "DEU",
+                    "properties": [
+                      "URBAN"
+                    ],
+                    "roadNames": [
+                      {
+                        "identifier": {
+                          "phonetic": "'blAnK.k$n.fEl.d$R+_'stR+@.s$",
+                          "phoneticLanguageCode": "en-GB",
+                          "text": "Blankenfelder Straße"
+                        },
+                        "roadAttribute": "NONE",
+                        "source": "ROAD"
+                      }
+                    ],
+                    "streetName": {
+                      "phonetic": "'blAnK.k$n.fEl.d$R+_'stR+@.s$",
+                      "phoneticLanguageCode": "en-GB",
+                      "text": "Blankenfelder Straße"
+                    }
+                  },
+                  "routeOffsetInMeters": 13995,
+                  "routePath": [
+                    {
+                      "distanceInMeters": 13995,
+                      "point": {
+                        "latitude": 52.60366,
+                        "longitude": 13.42547
+                      },
+                      "travelTimeInSeconds": 1874
+                    }
+                  ],
+                  "sideRoads": [
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 247,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 182,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 80,
+                      "side": "RIGHT"
+                    },
+                    {
+                      "drivable": true,
+                      "offsetFromManeuverInMeters": 4,
+                      "side": "RIGHT"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "roadShieldAtlasReference": "https://api.tomtom.com/maps/assets/sprites/1.0.0-0-roadshields/"
+      }
+    }
+  }
+]
