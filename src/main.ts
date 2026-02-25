@@ -109,7 +109,7 @@ function createApp(): void {
 
         <div class="full">
           <label for="explicit-input">
-            Explicit Fields <span class="hint">(use dot-notation)</span>
+            Explicit Fields <span class="hint">(e.g. A.B.X, A.B(X), A(B(X)))</span>
           </label>
           <textarea id="explicit-input" rows="3" spellcheck="false"></textarea>
         </div>
@@ -128,10 +128,10 @@ function createApp(): void {
 
     <div class="section result-section">
       <label for="node-input">
-        Check if this node exists in the filtered response <span class="hint">(use dot-notation)</span>
+        Check if this node exists in the filtered response <span class="hint">(e.g. A.B, A(B, C))</span>
       </label>
       <div class="node-check">
-        <input type="text" id="node-input" placeholder="e.g. routes.legs.points" />
+        <input type="text" id="node-input" placeholder="e.g. routes.legs.points or routes(legs, summary)" />
         <button id="node-check-btn">Check</button>
       </div>
       <div id="node-result"></div>
@@ -216,10 +216,19 @@ function createApp(): void {
       return
     }
 
-    const explicitFields = explicitInput.value
-      .split(/[,\n]/)
-      .map((entry) => entry.trim())
-      .filter((entry) => entry.length > 0)
+    // Parse explicit fields using the same parser as inclusion/exclusion,
+    // supporting both dot-notation and parenthesized set notation.
+    // Newlines are treated as commas (each line is a separate entry).
+    const explicitRaw = explicitInput.value.replace(/\n/g, ",").trim()
+    let explicitPaths: string[][]
+    try {
+      explicitPaths = explicitRaw.length === 0 ? [] : parseFieldList(explicitRaw)
+    } catch (e) {
+      jsonError.textContent = `Invalid explicit fields syntax: ${(e as Error).message}`
+      jsonOutput.value = ""
+      return
+    }
+    const explicitFields = explicitPaths.map((p) => p.join("."))
 
     // Validate field syntax before proceeding.
     let includePaths: string[][]
@@ -252,7 +261,7 @@ function createApp(): void {
 
     const unknownInclude = includeFields.filter((f) => !isFieldKnown(f, knownPaths))
     const unknownExclude = excludeFields.filter((f) => !isFieldKnown(f, knownPaths))
-    const unknownExplicit = explicitFields.filter((f) => !isFieldKnown(f, knownPaths))
+    const unknownExplicit = explicitFields.filter((f) => f !== "*" && !isFieldKnown(f, knownPaths))
 
     const warnings: string[] = []
     if (unknownInclude.length > 0) {
