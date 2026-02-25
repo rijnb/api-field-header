@@ -127,7 +127,7 @@ function createApp(): void {
 
     <div class="section result-section">
       <label for="node-input">
-        Check if this node exists in the filtered response <span class="hint">(dot-notation field name)</span>
+        Check if this node exists in the filtered response <span class="hint">(use dot-notation)</span>
       </label>
       <div class="node-check">
         <input type="text" id="node-input" placeholder="e.g. routes.legs.points" />
