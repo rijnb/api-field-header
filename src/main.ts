@@ -125,10 +125,6 @@ function createApp(): void {
       <textarea id="json-output" class="json-output" readonly spellcheck="false"></textarea>
     </div>
 
-    <div class="toolbox">
-      <div class="toolbox-title">🧰 Toolbox</div>
-      <a href="https://dot-notation-7hyuu.ondigitalocean.app/" target="_blank" rel="noopener noreferrer">Convert between JSON and dot-notation</a>
-    </div>
     <div class="section result-section">
       <label for="node-input">
         Check if this node exists in the response <span class="hint">(dot-notation field name)</span>
@@ -139,6 +135,12 @@ function createApp(): void {
       </div>
       <div id="node-result"></div>
     </div>
+
+    <div class="toolbox">
+      <div class="toolbox-title">🧰 Toolbox</div>
+      <a href="https://dot-notation-7hyuu.ondigitalocean.app/" target="_blank" rel="noopener noreferrer">Convert between JSON and dot-notation</a>
+    </div>
+  `
 
   const jsonInput = document.getElementById("json-input") as HTMLTextAreaElement
   const includeInput = document.getElementById("include-input") as HTMLInputElement
@@ -254,7 +256,7 @@ function createApp(): void {
 
     const result = filter.apply(parsed as Parameters<typeof filter.apply>[0])
     jsonOutput.value =
-      result === undefined ? "(entire object was excluded)" : JSON.stringify(result, null, 2)
+        result === undefined ? "(entire object was excluded)" : JSON.stringify(result, null, 2)
   }
 
   nodeCheckBtn.addEventListener("click", () => {
