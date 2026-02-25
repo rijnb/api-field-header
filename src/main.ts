@@ -88,14 +88,14 @@ function createApp(): void {
 
         <div>
           <label for="include-input">
-            Field Inclusion <span class="hint">(Attributes header, e.g. "A.B, A.C" or "A(B, C)" or "*")</span>
+            Field Inclusion <span class="hint">(Attributes header, e.g. A.B, A(B, C), *)</span>
           </label>
           <input type="text" id="include-input" value="" placeholder='e.g. A.B, A.C or A(B, C) or *' />
         </div>
 
         <div>
           <label for="exclude-input">
-            Field Exclusion <span class="hint">(Attributes-Excluded header, e.g. "A.B" or "A(B)")</span>
+            Field Exclusion <span class="hint">(Attributes-Excluded header, e.g. A.B, A(B))</span>
           </label>
           <input type="text" id="exclude-input" value="" placeholder="e.g. A.B.X.P or A(B)" />
         </div>
