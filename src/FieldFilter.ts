@@ -3,10 +3,21 @@
  * lists, as specified in the API response field selection mechanism.
  *
  * The filter supports:
- * - Field inclusion via dot-notation (e.g. "a.b,a.c").
- * - Field exclusion via dot-notation, which overrides inclusion.
+ * - Field inclusion via dot-notation (e.g. "a.b, a.c") or parenthesized
+ *   set notation (e.g. "a(b, c)"), or a mix of both.
+ * - Field exclusion via the same notation, which overrides inclusion.
  * - Explicit fields that are only returned when explicitly listed.
  * - Wildcard "*" in the inclusion list to include all non-explicit fields.
+ * - Wildcard "*" inside parentheses to select all fields at that level,
+ *   e.g. "a(x(*))" selects everything under a.x.
+ *
+ * Grammar (semi-formal):
+ *
+ *   field-inclusion-list ::= '*' | field-list
+ *   field-list           ::= field | field ',' field-list
+ *   field                ::= name | name '.' field | name field-set
+ *   field-set            ::= '(' field-set-list ')'
+ *   field-set-list       ::= '*' (',' field-list)? | field | field ',' field-list
  *
  * See docs/plans/design.md for the full specification.
  */
@@ -16,20 +27,154 @@ type JsonObject = { [key: string]: JsonValue }
 type JsonArray = JsonValue[]
 
 /**
- * Parse a comma-separated dot-notation field list string into an array of
- * field paths. Whitespace around commas and dots is trimmed.
+ * Parse a field list string into an array of field paths.
+ *
+ * Supports both dot-notation ("a.b, a.c") and parenthesized set notation
+ * ("a(b, c)"), as well as any mix of both. Whitespace is ignored around
+ * separators and parentheses. A "*" inside parentheses selects all children
+ * at that level.
+ *
  * Returns an empty array for empty/blank input.
  */
-function parseFieldList(input: string): string[][] {
+export function parseFieldList(input: string): string[][] {
   const trimmed = input.trim()
   if (trimmed.length === 0) return []
-  return trimmed.split(",").map((entry) =>
-    entry
-      .trim()
-      .split(".")
-      .map((segment) => segment.trim())
-      .filter((segment) => segment.length > 0),
-  )
+
+  const parser = new FieldListParser(trimmed)
+  return parser.parse()
+}
+
+/**
+ * Recursive-descent parser for the field list grammar:
+ *
+ *   field-list     ::= field (',' field)*
+ *   field          ::= name (('.' field) | field-set)?
+ *   field-set      ::= '(' field-set-list ')'
+ *   field-set-list ::= '*' | field (',' field)*
+ */
+class FieldListParser {
+  private pos = 0
+  private readonly src: string
+
+  constructor(src: string) {
+    this.src = src
+  }
+
+  parse(): string[][] {
+    const results = this.parseFieldList()
+    this.skipWhitespace()
+    if (this.pos < this.src.length) {
+      throw new Error(
+        `Unexpected character '${this.src[this.pos]}' at position ${this.pos}`,
+      )
+    }
+    return results
+  }
+
+  /** field-list ::= field (',' field)* */
+  private parseFieldList(): string[][] {
+    const paths: string[][] = []
+    this.collectField([], paths)
+    while (this.peek() === ",") {
+      this.consume() // skip ','
+      this.collectField([], paths)
+    }
+    return paths
+  }
+
+  /**
+   * Parse a single field production and collect every resulting path
+   * (there may be multiple when a field-set is used).
+   */
+  private collectField(prefix: string[], out: string[][]): void {
+    const name = this.parseName()
+    const currentPath = [...prefix, name]
+
+    const next = this.peek()
+    if (next === ".") {
+      this.consume() // skip '.'
+      this.collectField(currentPath, out)
+    } else if (next === "(") {
+      this.consume() // skip '('
+      this.parseFieldSetList(currentPath, out)
+      this.expect(")")
+    } else {
+      out.push(currentPath)
+    }
+  }
+
+  /** field-set-list ::= '*' (',' field-list)? | field (',' field)* */
+  private parseFieldSetList(prefix: string[], out: string[][]): void {
+    this.skipWhitespace()
+    if (this.peek() === "*") {
+      this.consume() // skip '*'
+      out.push([...prefix, "*"])
+      // Allow additional fields after "*", e.g. "A(*, B.X)"
+      while (this.peek() === ",") {
+        this.consume() // skip ','
+        this.collectField(prefix, out)
+      }
+      return
+    }
+    this.collectField(prefix, out)
+    while (this.peek() === ",") {
+      this.consume() // skip ','
+      this.collectField(prefix, out)
+    }
+  }
+
+  // ── Lexer helpers ──
+
+  private skipWhitespace(): void {
+    while (this.pos < this.src.length && /\s/.test(this.src[this.pos]!)) {
+      this.pos++
+    }
+  }
+
+  /** Peek at the next non-whitespace character (or undefined at end). */
+  private peek(): string | undefined {
+    this.skipWhitespace()
+    return this.pos < this.src.length ? this.src[this.pos] : undefined
+  }
+
+  /** Consume the current character (after skipping whitespace). */
+  private consume(): void {
+    this.skipWhitespace()
+    this.pos++
+  }
+
+  /** Consume and assert the expected character. */
+  private expect(ch: string): void {
+    this.skipWhitespace()
+    if (this.pos >= this.src.length || this.src[this.pos] !== ch) {
+      throw new Error(
+        `Expected '${ch}' at position ${this.pos}, got '${this.src[this.pos] ?? "EOF"}'`,
+      )
+    }
+    this.pos++
+  }
+
+  /**
+   * Parse a field name: one or more characters that are not
+   * whitespace, comma, dot, or parentheses.
+   */
+  private parseName(): string {
+    this.skipWhitespace()
+    const start = this.pos
+    while (
+      this.pos < this.src.length &&
+      !/[\s.,()]/.test(this.src[this.pos]!)
+    ) {
+      this.pos++
+    }
+    const name = this.src.slice(start, this.pos)
+    if (name.length === 0) {
+      throw new Error(
+        `Expected field name at position ${this.pos}, got '${this.src[this.pos] ?? "EOF"}'`,
+      )
+    }
+    return name
+  }
 }
 
 /**
@@ -61,6 +206,9 @@ function buildFieldTree(paths: string[][]): FieldNode {
 /**
  * Check whether a path (as segments) is explicitly listed in a set of paths.
  * "Explicitly listed" means the exact path appears, not just a parent of it.
+ *
+ * Paths ending in "*" are wildcards and do NOT count as explicitly listing
+ * any concrete field — they behave like the top-level "*" (all non-explicit).
  */
 function isPathExplicitlyListed(
   paths: string[][],
@@ -68,20 +216,56 @@ function isPathExplicitlyListed(
 ): boolean {
   return paths.some(
     (p) =>
-      p.length === target.length && p.every((seg, i) => seg === target[i]),
+      p.length === target.length &&
+      !p.includes("*") &&
+      p.every((seg, i) => seg === target[i]),
   )
 }
 
 /**
  * Check whether a path (or any of its descendants) is covered by a set of
  * paths. This is true if any listed path starts with the target path.
+ *
+ * A listed path ending in "*" is treated as covering everything at and
+ * below its prefix (without the "*"). So the path is considered listed
+ * when target equals the prefix, is a descendant of it, or is an ancestor
+ * of it (meaning the listed path is a descendant of target).
  */
 function isPathOrDescendantListed(
   paths: string[][],
   target: string[],
 ): boolean {
+  return paths.some((p) => {
+    if (p.length > 0 && p[p.length - 1] === "*") {
+      const prefix = p.slice(0, -1)
+      // prefix covers target (target is at or below prefix)
+      // OR target is above prefix (prefix is a descendant of target)
+      return (
+        (prefix.length <= target.length &&
+          prefix.every((seg, i) => seg === target[i])) ||
+        (prefix.length > target.length &&
+          target.every((seg, i) => seg === prefix[i]))
+      )
+    }
+    return (
+      p.length >= target.length &&
+      target.every((seg, i) => seg === p[i])
+    )
+  })
+}
+
+/**
+ * Like isPathOrDescendantListed, but ignores paths that end with "*".
+ * Used when checking EXPLICIT fields, which require concrete (non-wildcard)
+ * mention in the inclusion list.
+ */
+function isPathOrDescendantListedConcrete(
+  paths: string[][],
+  target: string[],
+): boolean {
   return paths.some(
     (p) =>
+      !p.includes("*") &&
       p.length >= target.length &&
       target.every((seg, i) => seg === p[i]),
   )
@@ -90,12 +274,23 @@ function isPathOrDescendantListed(
 /**
  * Check whether a path is covered by an ancestor in the set of paths.
  * This means some listed path is a proper prefix of the target path.
+ *
+ * A listed path ending in "*" is an ancestor of target if the prefix
+ * (without "*") is a proper prefix of target or equals target.
  */
 function isAncestorListed(paths: string[][], target: string[]): boolean {
-  return paths.some(
-    (p) =>
-      p.length < target.length && p.every((seg, i) => seg === target[i]),
-  )
+  return paths.some((p) => {
+    if (p.length > 0 && p[p.length - 1] === "*") {
+      const prefix = p.slice(0, -1)
+      return (
+        prefix.length < target.length &&
+        prefix.every((seg, i) => seg === target[i])
+      )
+    }
+    return (
+      p.length < target.length && p.every((seg, i) => seg === target[i])
+    )
+  })
 }
 
 /**
@@ -220,7 +415,7 @@ export class FieldFilter {
         continue
       }
 
-      const childExcludeNode = excludeNode[key] ?? {}
+      const childExcludeNode = excludeNode[key] ?? excludeNode["*"] ?? {}
       const childValue = obj[key]!
       const filtered = this.filterValue(childValue, childPath, childExcludeNode)
 
@@ -237,10 +432,13 @@ export class FieldFilter {
    * Check if a field path is excluded.
    */
   private isExcluded(excludeNode: FieldNode, key: string): boolean {
+    // A "*" leaf in the exclude tree means "exclude everything at this level".
+    if ("*" in excludeNode && Object.keys(excludeNode["*"]!).length === 0) {
+      return true
+    }
     // Excluded if this key is in the exclude tree and it's a leaf
     // (no more children means "exclude this and everything below").
-    return key in excludeNode && Object.keys(excludeNode[key]!).length === 0;
-
+    return key in excludeNode && Object.keys(excludeNode[key]!).length === 0
   }
 
   /**
@@ -267,9 +465,10 @@ export class FieldFilter {
     // EXPLICIT fields require exact mention in the inclusion list.
     // Similarly, non-explicit fields behind an unincluded EXPLICIT ancestor
     // are "gated" — an ancestor above the gate cannot grant implicit access.
-    // In both cases, the field itself or a descendant must be in the include list.
+    // In both cases, the field itself or a descendant must be listed
+    // concretely (wildcard paths do not open the explicit gate).
     if (isExplicit || this.hasUnincludedExplicitAncestor(path)) {
-      return isPathOrDescendantListed(this.includePaths, path)
+      return isPathOrDescendantListedConcrete(this.includePaths, path)
     }
 
     // Non-explicit field without an explicit gate: included if it, an ancestor,

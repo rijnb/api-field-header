@@ -1,4 +1,4 @@
-import { FieldFilter } from "./FieldFilter"
+import { FieldFilter, parseFieldList } from "./FieldFilter"
 
 interface Preset {
   preset: {
@@ -78,8 +78,9 @@ function createApp(): void {
     <p class="subtitle">Test field inclusion &amp; exclusion filters for API responses</p>
 
     <div class="info-box">
-      <strong>Rules:</strong> Inclusion uses comma-separated dot-notation (e.g. <code>A.B, A.C</code>)
-      or <code>*</code> for all non-explicit fields.
+      <strong>Rules:</strong> Inclusion uses comma-separated dot-notation (e.g. <code>A.B, A.C</code>),
+      parenthesized set notation (e.g. <code>A(B, C)</code>), or <code>*</code> for all non-explicit fields.
+      Use <code>(*)</code> inside parentheses to select all children at that level.
       Exclusion overrides inclusion. Explicit fields require explicit mention&nbsp;&mdash; a parent inclusion does not implicitly include them.
     </div>
 
@@ -94,16 +95,16 @@ function createApp(): void {
 
         <div>
           <label for="include-input">
-            Field Inclusion <span class="hint">(Attributes header, use dot-notation or "*")</span>
+            Field Inclusion <span class="hint">(Attributes header, e.g. "A.B, A.C" or "A(B, C)" or "*")</span>
           </label>
-          <input type="text" id="include-input" value="" placeholder='e.g. A.B, A.C or *' />
+          <input type="text" id="include-input" value="" placeholder='e.g. A.B, A.C or A(B, C) or *' />
         </div>
 
         <div>
           <label for="exclude-input">
-            Field Exclusion <span class="hint">(Attributes-Excluded header, use dot-notation)</span>
+            Field Exclusion <span class="hint">(Attributes-Excluded header, e.g. "A.B" or "A(B)")</span>
           </label>
-          <input type="text" id="exclude-input" value="" placeholder="e.g. A.B.X.P" />
+          <input type="text" id="exclude-input" value="" placeholder="e.g. A.B.X.P or A(B)" />
         </div>
 
         <div class="full">
@@ -189,13 +190,16 @@ function createApp(): void {
   }
 
   /**
-   * Check whether a dot-notation field path (or any prefix/descendant of it)
-   * matches a known path in the JSON. A field is considered "known" if:
-   * - It exactly matches a known path.
-  */
+   * Check whether a dot-notation field path is known in the JSON.
+   * For paths ending in "*" (wildcard), the parent path must exist.
+   * For concrete paths, the exact path must exist.
+   */
   function isFieldKnown(field: string, knownPaths: Set<string>): boolean {
-    return knownPaths.has(field);
-
+    if (field.endsWith(".*")) {
+      const parent = field.slice(0, -2)
+      return knownPaths.has(parent)
+    }
+    return knownPaths.has(field)
   }
 
   function applyFilter(): void {
@@ -217,16 +221,34 @@ function createApp(): void {
       .map((entry) => entry.trim())
       .filter((entry) => entry.length > 0)
 
+    // Validate field syntax before proceeding.
+    let includePaths: string[][]
+    try {
+      includePaths = includeInput.value.trim().length === 0
+        ? []
+        : parseFieldList(includeInput.value)
+    } catch (e) {
+      jsonError.textContent = `Invalid inclusion syntax: ${(e as Error).message}`
+      jsonOutput.value = ""
+      return
+    }
+
+    let excludePaths: string[][]
+    try {
+      excludePaths = excludeInput.value.trim().length === 0
+        ? []
+        : parseFieldList(excludeInput.value)
+    } catch (e) {
+      jsonError.textContent = `Invalid exclusion syntax: ${(e as Error).message}`
+      jsonOutput.value = ""
+      return
+    }
+
     // Validate fields against the input JSON.
     const knownPaths = collectKnownPaths(parsed)
 
-    const includeRaw = includeInput.value.trim()
-    const includeFields = includeRaw === "*" || includeRaw.length === 0
-      ? []
-      : includeRaw.split(",").map((e) => e.trim()).filter((e) => e.length > 0)
-    const excludeFields = excludeInput.value.trim().length === 0
-      ? []
-      : excludeInput.value.split(",").map((e) => e.trim()).filter((e) => e.length > 0)
+    const includeFields = includePaths.map((p) => p.join(".")).filter((f) => f !== "*")
+    const excludeFields = excludePaths.map((p) => p.join(".")).filter((f) => f !== "*")
 
     const unknownInclude = includeFields.filter((f) => !isFieldKnown(f, knownPaths))
     const unknownExclude = excludeFields.filter((f) => !isFieldKnown(f, knownPaths))
@@ -269,6 +291,23 @@ function createApp(): void {
       return
     }
 
+    // Validate syntax of the check field.
+    let checkPaths: string[][]
+    try {
+      checkPaths = parseFieldList(fieldName)
+    } catch (e) {
+      nodeResult.textContent = `Invalid syntax: ${(e as Error).message}`
+      nodeResult.className = "node-result absent"
+      return
+    }
+
+    // "*" is always valid — it means "all fields".
+    if (fieldName === "*" || checkPaths.every((p) => p.length === 1 && p[0] === "*")) {
+      nodeResult.textContent = "Valid (* matches all fields)"
+      nodeResult.className = "node-result exists"
+      return
+    }
+
     const outputText = jsonOutput.value.trim()
     if (outputText.length === 0 || outputText === "(entire object was excluded)") {
       nodeResult.textContent = "No filtered response available"
@@ -286,7 +325,9 @@ function createApp(): void {
     }
 
     const knownPaths = collectKnownPaths(parsed)
-    if (isFieldKnown(fieldName, knownPaths)) {
+    const resolvedFields = checkPaths.map((p) => p.join(".")).filter((f) => f !== "*")
+    const allExist = resolvedFields.every((f) => isFieldKnown(f, knownPaths))
+    if (allExist) {
       nodeResult.textContent = "Exists in response"
       nodeResult.className = "node-result exists"
     } else {
