@@ -264,18 +264,27 @@ function createApp(): void {
     const unknownExplicit = explicitFields.filter((f) => f !== "*" && !isFieldKnown(f, knownPaths))
 
     const warnings: string[] = []
+    const explicitWildcards = explicitFields.filter((f) => f === "*" || f.endsWith(".*"))
+    if (explicitWildcards.length > 0) {
+      warnings.push(`⚠️ The <code>*</code> in the explicit fields list has no effect. Explicit fields must be explicitly named.`)
+    }
+
+    const unknownWarnings: string[] = []
     if (unknownInclude.length > 0) {
-      warnings.push(`<strong>Inclusion:</strong> ${unknownInclude.map((f) => `<code>${f}</code>`).join(", ")}`)
+      unknownWarnings.push(`<strong>Inclusion:</strong> ${unknownInclude.map((f) => `<code>${f}</code>`).join(", ")}`)
     }
     if (unknownExclude.length > 0) {
-      warnings.push(`<strong>Exclusion:</strong> ${unknownExclude.map((f) => `<code>${f}</code>`).join(", ")}`)
+      unknownWarnings.push(`<strong>Exclusion:</strong> ${unknownExclude.map((f) => `<code>${f}</code>`).join(", ")}`)
     }
     if (unknownExplicit.length > 0) {
-      warnings.push(`<strong>Explicit:</strong> ${unknownExplicit.map((f) => `<code>${f}</code>`).join(", ")}`)
+      unknownWarnings.push(`<strong>Explicit:</strong> ${unknownExplicit.map((f) => `<code>${f}</code>`).join(", ")}`)
+    }
+    if (unknownWarnings.length > 0) {
+      warnings.push(`⚠️ Unknown fields (not found in JSON):<br>${unknownWarnings.join("<br>")}`)
     }
 
     if (warnings.length > 0) {
-      fieldWarning.innerHTML = `⚠️ Unknown fields (not found in JSON):<br>${warnings.join("<br>")}`
+      fieldWarning.innerHTML = warnings.join("<br>")
       fieldWarning.style.display = "block"
     }
 
