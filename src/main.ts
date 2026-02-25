@@ -51,6 +51,13 @@ function createApp(): void {
         cursor: pointer; transition: background 0.15s;
       }
       .preset-btn:hover { background: #d1d5db; }
+      .node-check { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+      .node-result {
+        font-size: 0.85rem; font-weight: 600; padding: 4px 10px; border-radius: 4px;
+        display: inline-block;
+      }
+      .node-result.exists { color: #166534; background: #dcfce7; }
+      .node-result.absent { color: #991b1b; background: #fee2e2; }
       .section { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
       .result-section { margin-top: 16px; }
       .info-box {
@@ -110,6 +117,17 @@ function createApp(): void {
       <label for="json-output">Filtered Output</label>
       <textarea id="json-output" class="json-output" readonly spellcheck="false"></textarea>
     </div>
+
+    <div class="section result-section">
+      <label for="node-input">
+        Check if this node exists in the response <span class="hint">(dot-notation field name)</span>
+      </label>
+      <div class="node-check">
+        <input type="text" id="node-input" placeholder="e.g. routes.legs.points" />
+        <button id="node-check-btn">Check</button>
+      </div>
+      <div id="node-result"></div>
+    </div>
   `
 
   const jsonInput = document.getElementById("json-input") as HTMLTextAreaElement
@@ -120,6 +138,9 @@ function createApp(): void {
   const jsonError = document.getElementById("json-error")!
   const applyBtn = document.getElementById("apply-btn") as HTMLButtonElement
   const presetButtonsContainer = document.getElementById("preset-buttons")!
+  const nodeInput = document.getElementById("node-input") as HTMLInputElement
+  const nodeCheckBtn = document.getElementById("node-check-btn") as HTMLButtonElement
+  const nodeResult = document.getElementById("node-result")!
 
   function applyPreset(preset: Preset["preset"]): void {
     jsonInput.value = JSON.stringify(preset.response, null, 2)
@@ -225,6 +246,35 @@ function createApp(): void {
     jsonOutput.value =
       result === undefined ? "(entire object was excluded)" : JSON.stringify(result, null, 2)
   }
+
+  nodeCheckBtn.addEventListener("click", () => {
+    nodeResult.textContent = ""
+    nodeResult.className = ""
+
+    const fieldName = nodeInput.value.trim()
+    if (fieldName.length === 0) {
+      nodeResult.textContent = ""
+      return
+    }
+
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(jsonInput.value)
+    } catch {
+      nodeResult.textContent = "Cannot check — invalid JSON input"
+      nodeResult.className = "node-result absent"
+      return
+    }
+
+    const knownPaths = collectKnownPaths(parsed)
+    if (isFieldKnown(fieldName, knownPaths)) {
+      nodeResult.textContent = "Exists in response"
+      nodeResult.className = "node-result exists"
+    } else {
+      nodeResult.textContent = "Absent in response"
+      nodeResult.className = "node-result absent"
+    }
+  })
 
   applyBtn.addEventListener("click", applyFilter)
 
