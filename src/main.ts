@@ -94,21 +94,21 @@ function createApp(): void {
 
         <div>
           <label for="include-input">
-            Field Inclusion <span class="hint">(Attributes header)</span>
+            Field Inclusion <span class="hint">(Attributes header, use dot-notation or "*")</span>
           </label>
           <input type="text" id="include-input" value="" placeholder='e.g. A.B, A.C or *' />
         </div>
 
         <div>
           <label for="exclude-input">
-            Field Exclusion <span class="hint">(Attributes-Excluded header)</span>
+            Field Exclusion <span class="hint">(Attributes-Excluded header, use dot-notation)</span>
           </label>
           <input type="text" id="exclude-input" value="" placeholder="e.g. A.B.X.P" />
         </div>
 
         <div class="full">
           <label for="explicit-input">
-            Explicit Fields <span class="hint">(comma or newline separated, dot-notation)</span>
+            Explicit Fields <span class="hint">(use dot-notation)</span>
           </label>
           <textarea id="explicit-input" rows="3" spellcheck="false"></textarea>
         </div>
