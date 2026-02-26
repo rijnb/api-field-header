@@ -78,8 +78,8 @@ function createApp(): void {
     <p class="subtitle">Test field inclusion &amp; exclusion filters for API responses</p>
 
     <div class="info-box">
-      <strong>Rules:</strong> Inclusion uses comma-separated dot-notation (e.g. <code>A.B, A.C</code>),
-      parenthesized set notation (e.g. <code>A(B, C)</code>), or <code>*</code> for all non-explicit fields.
+      <strong>Rules:</strong> Inclusion uses comma-separated dot-notation (e.g. <code>A.B, A.C</code>) or
+      parenthesized set notation (e.g. <code>A(B, C)</code>).
       Use <code>(*)</code> inside parentheses to select all children at that level.
       Exclusion overrides inclusion. Explicit fields require explicit mention&nbsp;&mdash; a parent inclusion does not implicitly include them.
     </div>
@@ -95,9 +95,9 @@ function createApp(): void {
 
         <div>
           <label for="include-input">
-            Header: Attributes <span class="hint">Field inclusion header, e.g. A.B, A(B, C), *</span>
+            Header: Attributes <span class="hint">Field inclusion header, e.g. A.B, A(B, C)</span>
           </label>
-          <input type="text" id="include-input" value="" placeholder='e.g. A.B, A.C or A(B, C) or *' />
+          <input type="text" id="include-input" value="" placeholder='e.g. A.B, A.C or A(B, C)' />
         </div>
 
         <div>
@@ -316,13 +316,6 @@ function createApp(): void {
     } catch (e) {
       nodeResult.textContent = `Invalid syntax: ${(e as Error).message}`
       nodeResult.className = "node-result absent"
-      return
-    }
-
-    // "*" is always valid — it means "all fields".
-    if (fieldName === "*" || checkPaths.every((p) => p.length === 1 && p[0] === "*")) {
-      nodeResult.textContent = "Valid (* matches all fields)"
-      nodeResult.className = "node-result exists"
       return
     }
 

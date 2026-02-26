@@ -50,23 +50,6 @@ describe("FieldFilter", () => {
       })
     })
 
-    it('"*" returns same as "A" (all non-explicit fields)', () => {
-      const filter = new FieldFilter({
-        include: "*",
-        explicitFields,
-      })
-      expect(filter.apply(fullObject)).toEqual({
-        A: {
-          B: {
-            Y: "y-value",
-          },
-          C: {
-            Z: "z-value",
-          },
-        },
-      })
-    })
-
     it('"A, A.B.X" includes explicit field A.B.X (but not Q)', () => {
       const filter = new FieldFilter({
         include: "A, A.B.X",
@@ -186,12 +169,6 @@ describe("FieldFilter", () => {
       expect(filter.apply(fullObject)).toEqual(fullObject)
     })
 
-    it('"*" returns entire object when no explicit fields defined', () => {
-      const filter = new FieldFilter({
-        include: "*",
-      })
-      expect(filter.apply(fullObject)).toEqual(fullObject)
-    })
   })
 
   describe("exclusion overrides inclusion", () => {
@@ -399,6 +376,12 @@ describe("FieldFilter", () => {
     it("returns empty array for empty input", () => {
       expect(parseFieldList("")).toEqual([])
       expect(parseFieldList("   ")).toEqual([])
+    })
+
+    it("rejects * as a top-level selector", () => {
+      expect(() => parseFieldList("*")).toThrow("not allowed as a top-level selector")
+      expect(() => parseFieldList("  *  ")).toThrow("not allowed as a top-level selector")
+      expect(() => parseFieldList("A, *")).toThrow("not allowed as a top-level selector")
     })
 
     it("parses wildcard mixed with fields inside parentheses", () => {

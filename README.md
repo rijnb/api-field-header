@@ -19,9 +19,7 @@ are returned in responses, reducing bandwidth and improving performance.
 1. Any field in the inclusion list (and its sub-tree) is returned in the response.
 2. Fields marked as **EXPLICIT** must be explicitly named in the inclusion list — including a
    parent does not implicitly include them.
-3. A `*` in the inclusion list returns all top-level fields and their sub-trees, excluding
-   EXPLICIT fields.
-4. Any field in the exclusion list is removed from the response, regardless of the inclusion list.
+3. Any field in the exclusion list is removed from the response, regardless of the inclusion list.
 
 For the full design specification, see [docs/plans/design.md](docs/plans/design.md).
 
@@ -75,7 +73,7 @@ npm run dev
 Open [http://localhost:5173](http://localhost:5173) to use the app. It provides input fields for:
 
 - **JSON Input** — the full JSON object to filter
-- **Field Inclusion** — comma-separated dot-notation paths (or `*`)
+- **Field Inclusion** — comma-separated dot-notation paths
 - **Field Exclusion** — comma-separated dot-notation paths
 - **Explicit Fields** — one dot-notation path per line
 

@@ -7,17 +7,18 @@
  *   set notation (e.g. "a(b, c)"), or a mix of both.
  * - Field exclusion via the same notation, which overrides inclusion.
  * - Explicit fields that are only returned when explicitly listed.
- * - Wildcard "*" in the inclusion list to include all non-explicit fields.
  * - Wildcard "*" inside parentheses to select all fields at that level,
  *   e.g. "a(x(*))" selects everything under a.x.
  *
+ * Note: "*" is NOT allowed as a top-level selector. You must specify at
+ * least one top-level field explicitly.
+ *
  * Grammar (semi-formal):
  *
- *   field-inclusion-list ::= '*' | field-list
- *   field-list           ::= field | field ',' field-list
- *   field                ::= name | name '.' field | name field-set
+ *   field-list           ::= field (',' field)*
+ *   field                ::= name ('.' field | field-set)?
  *   field-set            ::= '(' field-set-list ')'
- *   field-set-list       ::= '*' (',' field-list)? | field | field ',' field-list
+ *   field-set-list       ::= '*' (',' field)* | field (',' field)*
  *
  * See docs/plans/design.md for the full specification.
  */
@@ -88,6 +89,15 @@ class FieldListParser {
    */
   private collectField(prefix: string[], out: string[][]): void {
     const name = this.parseName()
+
+    // "*" is only allowed inside parentheses (handled by parseFieldSetList).
+    // At the top level (empty prefix), it is not a valid field name.
+    if (name === "*" && prefix.length === 0) {
+      throw new Error(
+        `'*' is not allowed as a top-level selector (position ${this.pos - 1}). Use specific field names or parenthesized wildcards like A(*).`,
+      )
+    }
+
     const currentPath = [...prefix, name]
 
     const next = this.peek()
@@ -298,7 +308,7 @@ function isAncestorListed(paths: string[][], target: string[]): boolean {
  */
 export interface FieldFilterOptions {
   /**
-   * Comma-separated dot-notation string for fields to include (or "*").
+   * Comma-separated dot-notation string for fields to include.
    * Corresponds to the "Attributes" HTTP header.
    */
   include?: string
@@ -312,7 +322,7 @@ export interface FieldFilterOptions {
   /**
    * List of field paths (in dot-notation) that are marked as EXPLICIT.
    * These fields are only included when explicitly mentioned in the
-   * inclusion list — not implicitly via a parent or "*".
+   * inclusion list — not implicitly via a parent.
    */
   explicitFields?: string[]
 }
@@ -327,14 +337,12 @@ export interface FieldFilterOptions {
  *    Exception: EXPLICIT fields must be explicitly listed (rule 2).
  * 2. EXPLICIT fields must be explicitly named in the inclusion list;
  *    including a parent does not implicitly include an EXPLICIT child.
- * 3. "*" returns all top-level fields and sub-trees, excluding EXPLICIT fields.
  *
  * Exclusion:
  * - Any field in the exclusion list (and its sub-tree) is removed from the
  *   result, regardless of the inclusion list. Exclusion overrides everything.
  */
 export class FieldFilter {
-  private readonly includeAll: boolean
   private readonly includePaths: string[][]
   private readonly excludePaths: string[][]
   private readonly explicitPaths: string[][]
@@ -343,8 +351,7 @@ export class FieldFilter {
   constructor(options: FieldFilterOptions = {}) {
     const includeRaw = (options.include ?? "").trim()
 
-    this.includeAll = includeRaw === "*"
-    this.includePaths = this.includeAll ? [] : parseFieldList(includeRaw)
+    this.includePaths = parseFieldList(includeRaw)
     this.excludePaths = parseFieldList(options.exclude ?? "")
     this.explicitPaths = (options.explicitFields ?? []).map((f) =>
       f
@@ -445,22 +452,14 @@ export class FieldFilter {
    * Check if a field path should be included based on inclusion rules.
    */
   private isIncluded(path: string[]): boolean {
-    // If no inclusion list is specified (empty, no "*"), include everything
+    // If no inclusion list is specified (empty), include everything
     // that is not explicit.
-    if (!this.includeAll && this.includePaths.length === 0) {
+    if (this.includePaths.length === 0) {
       return !this.isExplicitField(path) && !this.hasUnincludedExplicitAncestor(path)
     }
 
     // Check if this is an EXPLICIT field.
     const isExplicit = this.isExplicitField(path)
-
-    // Rule 3: "*" includes all non-EXPLICIT fields.
-    if (this.includeAll) {
-      if (isExplicit) {
-        return false
-      }
-      return !this.hasUnincludedExplicitAncestor(path)
-    }
 
     // EXPLICIT fields require exact mention in the inclusion list.
     // Similarly, non-explicit fields behind an unincluded EXPLICIT ancestor
