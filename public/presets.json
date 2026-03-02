@@ -32,11 +32,10 @@
   {
     "preset": {
       "name": "Guidance response with lanes",
-      "include": "routes, formatVersion",
+      "include": "routes",
       "exclude": "routes.guidance",
       "explicit": "routes(legs, sections.lanes), routes.summary.fuelConsumptionInLiters",
       "response": {
-        "formatVersion": "0.0.12",
         "routes": [
           {
             "summary": {
