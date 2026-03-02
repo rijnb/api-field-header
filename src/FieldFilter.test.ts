@@ -171,6 +171,78 @@ describe("FieldFilter", () => {
 
   })
 
+  describe("non-explicit child of explicit field included as whole subtree", () => {
+    it("including a descendant past an explicit field returns the full subtree at that descendant", () => {
+      // If routes.legs is EXPLICIT and include is "routes.legs.points",
+      // then points (non-explicit) should be returned as a whole subtree.
+      const input = {
+        routes: [
+          {
+            summary: { lengthInMeters: 13995 },
+            legs: [
+              {
+                summary: { lengthInMeters: 13995 },
+                points: [
+                  { latitude: 52.52949, longitude: 13.32396 },
+                  { latitude: 52.52978, longitude: 13.32396 },
+                  { latitude: 52.60366, longitude: 13.42547 },
+                ],
+              },
+            ],
+          },
+        ],
+      }
+      const filter = new FieldFilter({
+        include: "routes.legs.points",
+        explicitFields: ["routes.legs"],
+      })
+      expect(filter.apply(input)).toEqual({
+        routes: [
+          {
+            legs: [
+              {
+                points: [
+                  { latitude: 52.52949, longitude: 13.32396 },
+                  { latitude: 52.52978, longitude: 13.32396 },
+                  { latitude: 52.60366, longitude: 13.42547 },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+    })
+
+    it("including a non-explicit child of explicit field returns child subtree fully", () => {
+      // A.B.X is EXPLICIT. Include "A.B.X.P" — P is not explicit,
+      // so its entire value should be returned.
+      const deepObject = {
+        A: {
+          B: {
+            X: {
+              P: { nested: "deep", other: "value" },
+              Q: "q-value",
+            },
+            Y: "y-value",
+          },
+        },
+      }
+      const filter = new FieldFilter({
+        include: "A.B.X.P",
+        explicitFields: ["A.B.X"],
+      })
+      expect(filter.apply(deepObject)).toEqual({
+        A: {
+          B: {
+            X: {
+              P: { nested: "deep", other: "value" },
+            },
+          },
+        },
+      })
+    })
+  })
+
   describe("exclusion overrides inclusion", () => {
     it("excluding a field that was explicitly included removes it", () => {
       const filter = new FieldFilter({

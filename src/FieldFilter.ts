@@ -304,6 +304,26 @@ function isAncestorListed(paths: string[][], target: string[]): boolean {
 }
 
 /**
+ * Like isAncestorListed, but ignores paths that contain "*" and only
+ * considers ancestors whose length is at least `minLength`.
+ * Used when checking fields behind an explicit gate — only concrete
+ * (non-wildcard) ancestors that are at or below the gate can grant access.
+ */
+function isAncestorListedConcreteBelow(
+  paths: string[][],
+  target: string[],
+  minLength: number,
+): boolean {
+  return paths.some(
+    (p) =>
+      !p.includes("*") &&
+      p.length >= minLength &&
+      p.length < target.length &&
+      p.every((seg, i) => seg === target[i]),
+  )
+}
+
+/**
  * Options for FieldFilter.
  */
 export interface FieldFilterOptions {
@@ -466,8 +486,21 @@ export class FieldFilter {
     // are "gated" — an ancestor above the gate cannot grant implicit access.
     // In both cases, the field itself or a descendant must be listed
     // concretely (wildcard paths do not open the explicit gate).
-    if (isExplicit || this.hasUnincludedExplicitAncestor(path)) {
-      return isPathOrDescendantListedConcrete(this.includePaths, path)
+    const gateDepth = this.nearestUnincludedExplicitAncestorDepth(path)
+    if (isExplicit || gateDepth >= 0) {
+      return (
+        isPathOrDescendantListedConcrete(this.includePaths, path) ||
+        // A non-explicit field whose concrete ancestor is listed gets
+        // included as part of that ancestor's sub-tree, provided that
+        // ancestor is at or below the explicit gate (i.e. it passed
+        // through the gate itself).
+        (!isExplicit &&
+          isAncestorListedConcreteBelow(
+            this.includePaths,
+            path,
+            gateDepth,
+          ))
+      )
     }
 
     // Non-explicit field without an explicit gate: included if it, an ancestor,
@@ -498,17 +531,24 @@ export class FieldFilter {
    * So the field A.B.X.P would have an unincluded explicit ancestor (X).
    */
   private hasUnincludedExplicitAncestor(path: string[]): boolean {
-    // Check each proper prefix of `path` to see if it is an explicit field
-    // that is not in the include list.
+    return this.nearestUnincludedExplicitAncestorDepth(path) >= 0
+  }
+
+  /**
+   * Return the depth (segment count) of the nearest (shallowest) ancestor
+   * of `path` that is an EXPLICIT field NOT explicitly listed in the
+   * inclusion list. Returns -1 if no such ancestor exists.
+   */
+  private nearestUnincludedExplicitAncestorDepth(path: string[]): number {
     for (let i = 1; i < path.length; i++) {
       const ancestorPath = path.slice(0, i)
       if (
         this.isExplicitField(ancestorPath) &&
         !isPathExplicitlyListed(this.includePaths, ancestorPath)
       ) {
-        return true
+        return i
       }
     }
-    return false
+    return -1
   }
 }
